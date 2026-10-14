@@ -1,0 +1,12 @@
+numpy
+pandas
+pyarrow
+scikit-learn
+matplotlib
+torch
+mlflow
+psycopg[binary]
+pytest
+nbformat
+nbclient
+ipykernel

@@ -1,0 +1,93 @@
+{
+  "airport": "LFPG",
+  "rows": 15931,
+  "events": 553,
+  "features": [
+    "height_ft",
+    "vertical_rate_fps",
+    "past_height_rate_fps",
+    "speed_knots",
+    "distance_m",
+    "lateral_m",
+    "heading_error_deg",
+    "past_gap_s",
+    "horizon_s"
+  ],
+  "checks": {
+    "no_nulls": true,
+    "finite_numeric": true,
+    "unique_pair": true,
+    "event_single_split": true,
+    "event_single_day": true,
+    "metar_available": true,
+    "target_before_boundary": true,
+    "horizon_range": true,
+    "horizon_matches_time": true,
+    "residual_matches_target": true,
+    "baseline_matches_physics": true
+  },
+  "source_files": [
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-03-06\\examples.parquet",
+      "sha256": "4901f76ac8e00ac80c30c52459093ad2cd58bea3aa1a9cdaad40ad66833af335"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-03-07\\examples.parquet",
+      "sha256": "40fc4ceb8215d9090c6cec8ca9b138516b984ccabcc96a1f0e8d636407980879"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-03-08\\examples.parquet",
+      "sha256": "d448026cacd7394be05d427eedbf40d4c3ffaf0679d0dcfea136242ed0c49304"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-03-09\\examples.parquet",
+      "sha256": "e93b90e9c790d0072e576f74dbe870ed3a087265d42271d5966364e9db89f667"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-03-17\\examples.parquet",
+      "sha256": "5b4be934ea15465758c5a92587df426d4aa3775e1780a344bf3ac142d5448915"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-07-12\\examples.parquet",
+      "sha256": "74abada62ad5d71b3fc14834dc4395ce0652e4e3b6622b2000f0d4f4ff614b77"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-08-10\\examples.parquet",
+      "sha256": "fba872e44178914f444a29504e7cd1ec102e57c69949f5af1516d7e81305dab1"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-08-18\\examples.parquet",
+      "sha256": "713565cd83c19d846ee45a0d986322ba2f74823adcfeea944914f41f9727e931"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-08-24\\examples.parquet",
+      "sha256": "97e356b4bd0d232978ff2a111598956a0920fec42de5b61b723a56cae1f5d2f7"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-08-25\\examples.parquet",
+      "sha256": "ab189f9fe9bc6a357443584edd2265bc8a5de9ca44159bbd5ea8f8435925105d"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-09-28\\examples.parquet",
+      "sha256": "6c646ecefcdcb068a05be92dc8550737804cdb9a1d7b643160caaa992abe5d51"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-10-02\\examples.parquet",
+      "sha256": "32ee578016f476d6d6be8d658773793d9eb4eafa3ef2298194ed4487c741a0da"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-10-07\\examples.parquet",
+      "sha256": "534502cc401ca9129a04d773174d71388986756c343abc7cc7c6770c13c099ac"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-10-18\\examples.parquet",
+      "sha256": "d9ccdce1400b4278420a27773ff2082fa6d06030fc4859664997e45659146120"
+    },
+    {
+      "path": "research\\lfpg-seasonal-learning\\data\\2025-11-04\\examples.parquet",
+      "sha256": "f924a80c904166425d75f4d95d4797e90fe0401127921cf4edefb7931dd2f7f7"
+    }
+  ],
+  "split_sha256": "85be1e26e230c42e15c7d80e1b072ec5f28b724e88bb8155cb4317e59c9db549",
+  "staged_sha256": "b125c363014d9574f272930ac68b20bfb08ddb940dd2148f88d6eb5ad76321d5"
+}

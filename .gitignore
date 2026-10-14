@@ -1,0 +1,19 @@
+# Local environments and secrets
+.venv/
+.env
+__pycache__/
+.pytest_cache/
+*.pyc
+# Local data and experiment storage
+data/
+artifacts/
+mlruns/
+mlartifacts/
+*.db
+# All checkpoints remain local
+Checkpoint/
+Checkpoints/
+00_Checkpoint/
+**/*[Cc]heckpoint*/
+**/CP-*.md
+**/*[Cc]heckpoint*.md
