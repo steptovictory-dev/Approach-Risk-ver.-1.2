@@ -37,3 +37,5 @@ CREATE TABLE IF NOT EXISTS altitude.examples (
     CHECK (origin_metar_available_time <= origin_time)
 );
 CREATE INDEX IF NOT EXISTS examples_day_idx ON altitude.examples (airport, day);
+-- Дополнительные метаданные присутствуют в исходных примерах EGLL и EDDF
+ALTER TABLE altitude.examples ADD COLUMN IF NOT EXISTS airport_elevation_ft double precision;

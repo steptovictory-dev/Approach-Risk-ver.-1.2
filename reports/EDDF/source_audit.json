@@ -1,0 +1,93 @@
+{
+  "airport": "EDDF",
+  "rows": 96714,
+  "events": 2634,
+  "features": [
+    "height_ft",
+    "vertical_rate_fps",
+    "past_height_rate_fps",
+    "speed_knots",
+    "distance_m",
+    "lateral_m",
+    "heading_error_deg",
+    "past_gap_s",
+    "horizon_s"
+  ],
+  "checks": {
+    "no_nulls": true,
+    "finite_numeric": true,
+    "unique_pair": true,
+    "event_single_split": true,
+    "event_single_day": true,
+    "metar_available": true,
+    "target_before_boundary": true,
+    "horizon_range": true,
+    "horizon_matches_time": true,
+    "residual_matches_target": true,
+    "baseline_matches_physics": true
+  },
+  "source_files": [
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-03-08\\examples.parquet",
+      "sha256": "5a4f17855bde9e52c6e3d6759169cb3c542fca2e266153c5674658653634da70"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-03-09\\examples.parquet",
+      "sha256": "70df717bef8f9014c18d7940f8c28b8d8a891dddb65f9a4431fd3bb037bd2ffc"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-04-04\\examples.parquet",
+      "sha256": "b513ba172645db1868bd0ab5621850cc1745dc18a2f162d1f163aab7890007ca"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-04-07\\examples.parquet",
+      "sha256": "a86d9c2f6fbec32fb5242c3faad191d118d4afb981969553118ff8dc0600b43f"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-05-09\\examples.parquet",
+      "sha256": "d1ef4c6390d337e301ab781a1ffc9aed9cb09eba979023c7bac2daee7928d6d8"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-06-19\\examples.parquet",
+      "sha256": "8f66f1b572b04d6e81264beea0a021e960fda6b07dd0e307a62c6a5e697ef3c5"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-06-20\\examples.parquet",
+      "sha256": "751eed161f6b590e47fe66ed63a93b12ca0fd11c5dd5e1924ccd9d8fc119137e"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-08-10\\examples.parquet",
+      "sha256": "871827bacb1fc34a688540c51262a032f1974f49f62c794a3e2c89cecc7255a9"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-08-17\\examples.parquet",
+      "sha256": "7ea383bf60c70f6870aa984d181fd3db295e6d991bb6e302d2ea955f3d31a2b6"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-08-18\\examples.parquet",
+      "sha256": "c95599b7f788093206716032b4510b7caed620067fa98edf578240aeeb136bf4"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-09-06\\examples.parquet",
+      "sha256": "cc6392f96bf512fb99c89ff26b64d464f896d859cf45c2be333b2e11af698574"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-09-07\\examples.parquet",
+      "sha256": "1109c3d5819509dc49c22f69b1f53d19ae9fdf0d32b4074dd7e9e72ca5721255"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-10-02\\examples.parquet",
+      "sha256": "03663a0d85d770fdfea6b3b238ba2ba6a7c501a81bd26dfac5c1c051dc514ca4"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-10-18\\examples.parquet",
+      "sha256": "6ace6c89bc2bcbc1cad6d26906222c54808090afde6bd4ff4e933d13afeaf03c"
+    },
+    {
+      "path": "research\\eddf-seasonal-learning\\data\\2025-10-19\\examples.parquet",
+      "sha256": "e85b9c5c68fb4d1635729594d9745f811d0fc200dd269f2baa9afbc99c18ff3a"
+    }
+  ],
+  "split_sha256": "97db3817fc7a1114dcc9b1583c3bb2ec290d404ba66c2dac6318662be672560e",
+  "staged_sha256": "0c19369a7a219b4e7adac57f145c1a87003152b5cc31b1527006d3d66115e0c9"
+}

@@ -4,6 +4,7 @@ import copy
 import json
 import subprocess
 import joblib
+import argparse
 import numpy as np
 import pandas as pd
 import torch
@@ -85,10 +86,12 @@ def mlp_fit(train, validation, width):
     return predict, best, history, model, scaler, target_scale
 
 
-def run():
+def run(airport='LFPG'):
+    from airport_paths import paths
+    folders = paths(airport)
     np.random.seed(SEED)
     torch.set_num_threads(2)
-    path = ROOT / 'data/postgres_examples.parquet'
+    path = folders['data'] / 'postgres_examples.parquet'
     if not path.exists():
         raise RuntimeError('Run PostgreSQL ingestion and extraction before training')
     frame = pd.read_parquet(path)
@@ -97,9 +100,9 @@ def run():
     test = frame.loc[frame.split.eq('test')].copy()
     if frame.groupby(['airport', 'event_id']).split.nunique().ne(1).any():
         raise ValueError('An event crosses splits')
-    reports, artifacts = ROOT/'reports', ROOT/'artifacts'
-    reports.mkdir(exist_ok=True)
-    artifacts.mkdir(exist_ok=True)
+    reports, artifacts = folders['reports'], folders['artifacts']
+    reports.mkdir(parents=True,exist_ok=True)
+    artifacts.mkdir(parents=True,exist_ok=True)
     models = [('Constant vertical rate', lambda f: f.baseline_ft.to_numpy(), {})]
     search = []
     for family in ['Ridge', 'Polynomial Ridge']:
@@ -142,13 +145,13 @@ def run():
     pd.DataFrame(search).to_csv(reports/'validation_search.csv', index=False)
     pd.DataFrame(histories).to_csv(reports/'mlp_history.csv', index=False)
     mlflow.set_tracking_uri('sqlite:///'+(ROOT/'mlflow.db').as_posix())
-    mlflow.set_experiment('LFPG altitude forecasting')
+    mlflow.set_experiment(f'{airport} altitude forecasting')
     sha = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True,
                          text=True).stdout.strip() or 'uncommitted'
     rows = []
     for name, predict, params in models:
         with mlflow.start_run(run_name=name) as active:
-            mlflow.log_params({**params, 'seed': SEED, 'airport': 'LFPG',
+            mlflow.log_params({**params, 'seed': SEED, 'airport': airport,
                                'train_rows': len(train), 'validation_rows': len(validation),
                                'test_rows': len(test), 'dataset_sha256': digest(path),
                                'git_commit': sha, 'features': json.dumps(FEATURES)})
@@ -186,4 +189,6 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--airport',choices=['LFPG','EGLL','EDDF'],default='LFPG')
+    run(parser.parse_args().airport)

@@ -1,0 +1,10 @@
+season,split,rows,events
+autumn,test,13472,367
+autumn,train,39770,1146
+autumn,validation,12151,362
+spring,test,7014,385
+spring,train,19537,1136
+spring,validation,6457,388
+summer,test,15224,384
+summer,train,41384,1156
+summer,validation,11499,277

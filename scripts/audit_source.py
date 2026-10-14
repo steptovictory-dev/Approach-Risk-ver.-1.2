@@ -18,8 +18,10 @@ def digest(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
-def audit(source):
-    study = source / 'research/lfpg-seasonal-learning'
+def audit(source, airport='LFPG'):
+    from airport_paths import paths
+    folders = paths(airport)
+    study = source / f'research/{airport.lower()}-seasonal-learning'
     split_path = study / 'reports/csv/selected_days.csv'
     days = pd.read_csv(split_path)
     if len(days) != 15 or days.day.duplicated().any():
@@ -32,7 +34,7 @@ def audit(source):
             raise ValueError(f'Inventory mismatch: {row.day}')
         if not frame.day.eq(row.day).all():
             raise ValueError(f'Day mismatch: {row.day}')
-        frames.append(frame.assign(season=row.season, split=row.split, airport='LFPG'))
+        frames.append(frame.assign(season=row.season, split=row.split, airport=airport))
         files.append({'path': str(path.relative_to(source)), 'sha256': digest(path)})
     frame = pd.concat(frames, ignore_index=True)
     # Сохраняем исходное время в секундах Unix для явного преобразования в PostgreSQL
@@ -55,16 +57,16 @@ def audit(source):
     if not all(checks.values()):
         raise ValueError(f'Source checks failed: {checks}')
     # Сохраняем локально только проверенные примеры, исходные файлы не изменяем
-    local = ROOT / 'data'
-    local.mkdir(exist_ok=True)
-    frame.to_parquet(local / 'lfpg_examples.parquet', index=False)
+    local = folders['data']
+    local.mkdir(parents=True,exist_ok=True)
+    frame.to_parquet(local / f'{airport.lower()}_examples.parquet', index=False)
     days.to_csv(local / 'selected_days.csv', index=False)
-    report = {'airport': 'LFPG', 'rows': len(frame), 'events': frame.event_id.nunique(),
+    report = {'airport': airport, 'rows': len(frame), 'events': frame.event_id.nunique(),
               'features': FEATURES, 'checks': checks, 'source_files': files,
               'split_sha256': digest(split_path),
-              'staged_sha256': digest(local / 'lfpg_examples.parquet')}
-    reports = ROOT / 'reports'
-    reports.mkdir(exist_ok=True)
+              'staged_sha256': digest(local / f'{airport.lower()}_examples.parquet')}
+    reports = folders['reports']
+    reports.mkdir(parents=True,exist_ok=True)
     (reports / 'source_audit.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
     summary = frame.groupby(['season', 'split']).agg(rows=('event_id', 'size'),
                                                      events=('event_id', 'nunique'))
@@ -76,4 +78,6 @@ def audit(source):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=Path, default=ROOT.parent / 'Approach Risk ver. 1.1')
-    audit(parser.parse_args().source)
+    parser.add_argument('--airport',choices=['LFPG','EGLL','EDDF'],default='LFPG')
+    args = parser.parse_args()
+    audit(args.source,args.airport)

@@ -1,0 +1,93 @@
+{
+  "airport": "EGLL",
+  "rows": 166508,
+  "events": 5601,
+  "features": [
+    "height_ft",
+    "vertical_rate_fps",
+    "past_height_rate_fps",
+    "speed_knots",
+    "distance_m",
+    "lateral_m",
+    "heading_error_deg",
+    "past_gap_s",
+    "horizon_s"
+  ],
+  "checks": {
+    "no_nulls": true,
+    "finite_numeric": true,
+    "unique_pair": true,
+    "event_single_split": true,
+    "event_single_day": true,
+    "metar_available": true,
+    "target_before_boundary": true,
+    "horizon_range": true,
+    "horizon_matches_time": true,
+    "residual_matches_target": true,
+    "baseline_matches_physics": true
+  },
+  "source_files": [
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-03-07\\examples.parquet",
+      "sha256": "a7bfd0a41f3f555e92bb7bcfc8e4507c80d58a7eef0e1cbcea74602633f172d4"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-03-09\\examples.parquet",
+      "sha256": "f5ff3631acd619d4d8904b45f6333a6bdb837a4fa6c1ed882372c64180905ed3"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-03-20\\examples.parquet",
+      "sha256": "8ac11eb2d9aad3cab79e80ac43b7d8e14c1551e3926da2a0af7f062318f6d53a"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-04-04\\examples.parquet",
+      "sha256": "55186c5e6e1a5ef44e7fd1afcb118e8149fc4de3067b60e537e4d20bef28c53e"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-04-07\\examples.parquet",
+      "sha256": "a06fee32079e4098e896a608b8742d1e244c95b7ef816d4e7cc17746e95a4c77"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-06-20\\examples.parquet",
+      "sha256": "1adfd99d99b420ef92ac2ba443adaab718118172b0e77f49d5c40005751ec4d8"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-07-12\\examples.parquet",
+      "sha256": "426a213b71968b1baed6f792f44cbb536588d7b05d9d0c7cbecc7e7c82888630"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-08-17\\examples.parquet",
+      "sha256": "8d0e114144490fc54ed5302b9e162029ff165be9c131fcbacedbd912b3bb2978"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-08-24\\examples.parquet",
+      "sha256": "5ec596f9af82a5b37b48e9ebd3d8c2665a2d312e863495efec32fd762b610527"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-08-25\\examples.parquet",
+      "sha256": "2566899bd2f44beeff074f450527ecca7f1d475f4298fae87565985936b39a24"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-09-23\\examples.parquet",
+      "sha256": "09f333c0cd80af35200db6acd56360aa3368d5a3ed479ad400e3f5234b35858b"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-09-24\\examples.parquet",
+      "sha256": "1e46b1818e4851deaceac5fbabc6073614090d7bf2b77be68e144889288d7e9e"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-09-25\\examples.parquet",
+      "sha256": "2e15cb548b91bbc718b21bbd7e61bd7f0e33b5fb03e5f3745335750be4d23257"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-09-27\\examples.parquet",
+      "sha256": "06d5a3158b80abaee6b00352b7091cd32bd4cf9d76c0ff1b721b3abbe05a03dd"
+    },
+    {
+      "path": "research\\egll-seasonal-learning\\data\\2025-10-18\\examples.parquet",
+      "sha256": "39f5ce5354200f24d82964f3edfdcdc955576888f02a3a5a65f8073db9f84b22"
+    }
+  ],
+  "split_sha256": "859410436500b9a4b321cc0813492a445a7650960245085cbaa5b302e3a3c7c2",
+  "staged_sha256": "54f3e06cb60e35ab7fe73ae830468b32e4ce46fa6183511f0c0ff21d16e6a1f9"
+}

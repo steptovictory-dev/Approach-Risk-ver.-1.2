@@ -20,6 +20,8 @@ def test_dense_event_does_not_dominate_metric():
 def test_frozen_split_and_source_roundtrip():
     source = pd.read_parquet(ROOT/'data/lfpg_examples.parquet')
     extracted = pd.read_parquet(ROOT/'data/postgres_examples.parquet')
+    if 'airport_elevation_ft' not in source and 'airport_elevation_ft' in extracted:
+        source['airport_elevation_ft'] = None
     keys = ['day', 'event_id', 'origin_time']
     pd.testing.assert_frame_equal(source[extracted.columns].sort_values(keys).reset_index(drop=True),
                                   extracted.sort_values(keys).reset_index(drop=True), check_dtype=False)
