@@ -43,6 +43,18 @@ cells = [
         'Строгий онлайн-горизонт 30 секунд, go-around и эксплуатационная безопасность не проверены')
 ]
 notebook = nbformat.v4.new_notebook(cells=cells)
+cells_for_aggregation = [
+    nbformat.v4.new_markdown_cell('## Усреднение ошибки по заходам\n\n'
+        'GROUP BY сначала вычисляет MAE каждого захода; CTE хранит промежуточный результат '
+        'в пределах запроса. Затем ошибки усредняются между заходами. При усреднении по строкам '
+        'вклад захода пропорционален числу пар. На тесте baseline: 49.35 ft по заходам '
+        'и 51.58 ft по строкам. Количество пар зависит от плотности и пригодности наблюдений, '
+        'поэтому не равно длительности захода'),
+    nbformat.v4.new_code_cell('# Показываем независимый SQL-расчет и распределение числа пар\n'
+        'display(pd.read_csv(root / "reports/sql/event_mae_01.csv"))\n'
+        'display(Image(filename=str(root / "reports/event_pair_distribution.png")))')
+]
+notebook.cells[-1:-1] = cells_for_aggregation
 NotebookClient(notebook, timeout=120, kernel_name='python3',
                resources={'metadata': {'path': str(ROOT)}}).execute()
 folder = ROOT/'notebooks'

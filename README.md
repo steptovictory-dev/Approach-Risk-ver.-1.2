@@ -41,6 +41,8 @@ Python 3.12.14. Установить requirements-lock.txt в отдельное
 
 [SQL JOIN: перенос split и проверка количества строк](docs/SQL_JOIN.md)
 
+[GROUP BY и CTE: агрегация MAE по заходам](docs/EVENT_MAE.md)
+
 ```powershell
 .\.venv\Scripts\python.exe scripts/audit_source.py
 .\.venv\Scripts\python.exe scripts/database.py

@@ -25,6 +25,7 @@ def run(sql_file='analytics.sql', prefix=''):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--sql-file', choices=['analytics.sql', 'join_checks.sql'], default='analytics.sql')
+    parser.add_argument('--sql-file', choices=['analytics.sql', 'join_checks.sql', 'event_mae.sql'], default='analytics.sql')
     args = parser.parse_args()
-    run(args.sql_file, 'join_' if args.sql_file == 'join_checks.sql' else '')
+    prefix = {'analytics.sql': '', 'join_checks.sql': 'join_', 'event_mae.sql': 'event_mae_'}[args.sql_file]
+    run(args.sql_file, prefix)
