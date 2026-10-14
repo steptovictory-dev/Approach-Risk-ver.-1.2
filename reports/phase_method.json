@@ -1,0 +1,32 @@
+{
+  "interval_rule": "fixed descriptive bins, left-closed/right-open",
+  "height_edges_ft": [
+    500,
+    1000,
+    1500,
+    2000,
+    3000
+  ],
+  "distance_edges_m": [
+    2000,
+    4000,
+    6000,
+    8000,
+    12000
+  ],
+  "unit": "mean within event and bin, then mean across events represented in bin",
+  "models_frozen": true,
+  "hypothesis_testing": false,
+  "sparse_group_annotation": "n < 10 marked on plots; all observations retained",
+  "limitations": [
+    "cohort varies by bin",
+    "same events can appear in several bins",
+    "barometric height proxy, not radio altitude",
+    "not operational gates"
+  ],
+  "input_sha256": {
+    "LFPG": "0695be2a686db4694d1249e3b4bf70062fea71c901d00d3f11d7de580efae26a",
+    "EGLL": "312ed19b3d2ae77b8cb36584e2d730f373e271224e611201cdf58284ba16edb8",
+    "EDDF": "a39a2db06d1617441bf8be6be901a740670e7fd3195d269f2f7b5e110ae0773f"
+  }
+}

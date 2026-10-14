@@ -2,6 +2,7 @@
 import os
 import sys
 import json
+import re
 import subprocess
 import importlib.metadata
 from pathlib import Path
@@ -28,6 +29,8 @@ def run():
                 raise ValueError(f'Версия не совпала с lock: {item.name}')
             checked_packages += 1
     artifacts, database = [], []
+    source_files_verified = 0
+    tests_passed = None
     for airport in ['LFPG','EGLL','EDDF']:
         folders = paths(airport)
         frame = pd.read_parquet(folders['data']/'postgres_examples.parquet')
@@ -37,6 +40,7 @@ def run():
             original = ROOT.parent/'Approach Risk ver. 1.1'/item['path']
             if digest(original) != item['sha256']:
                 raise ValueError('Изменился исходный Parquet')
+            source_files_verified += 1
         with psycopg.connect(os.environ['DATABASE_URL']) as connection:
             count = connection.execute('SELECT count(*) FROM altitude.examples WHERE airport=%s',(airport,)).fetchone()[0]
             if count != len(frame):
@@ -57,15 +61,20 @@ def run():
             artifacts.append({'airport':airport,'model':name,'metrics_match':True})
     # Запускаем проверки и ноутбуки именно текущим интерпретатором
     commands = [['-m','pip','check'],['-m','pytest','-q'],
-                ['scripts/build_notebook.py'],['scripts/build_airport_comparison.py']]
+                ['scripts/analyze_flight_phase.py'],['scripts/build_notebook.py'],['scripts/build_airport_comparison.py']]
     for args in commands:
         result = subprocess.run([sys.executable,*args],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',errors='replace')
         if result.returncode:
             raise RuntimeError(f'Не прошла команда {args}: {result.stdout}\n{result.stderr}')
+        if args == ['-m','pytest','-q']:
+            match = re.search(r'(\d+) passed',result.stdout)
+            if match is None:
+                raise ValueError('Не удалось подтвердить число пройденных тестов')
+            tests_passed = int(match.group(1))
         print('PASS:', ' '.join(args))
     report = {'python':sys.version.split()[0],'clean_review_environment':Path(sys.prefix)==ROOT/'data/review_env',
-              'checked_locked_packages':checked_packages,'source_parquet_files_verified':45,
-              'restored_models':artifacts,'database_inventory':database,'tests_passed':13,
+              'checked_locked_packages':checked_packages,'source_parquet_files_verified':source_files_verified,
+              'restored_models':artifacts,'database_inventory':database,'tests_passed':tests_passed,
               'notebooks_executed':2,'new_training':False,
               'limitations':['existing local 1.1 source data and PostgreSQL required',
                              'raw acquisition on a new machine not tested',
