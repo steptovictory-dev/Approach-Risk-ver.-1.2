@@ -37,6 +37,8 @@
 
 Python 3.12.14. Установить requirements-lock.txt в отдельное окружение. PostgreSQL 17.11 используется локально на 127.0.0.1:55432. DATABASE_URL хранится в игнорируемом .env
 
+[Подготовка PostgreSQL, запуск, остановка и устройство загрузчика](docs/POSTGRESQL.md)
+
 ```powershell
 .\.venv\Scripts\python.exe scripts/audit_source.py
 .\.venv\Scripts\python.exe scripts/database.py

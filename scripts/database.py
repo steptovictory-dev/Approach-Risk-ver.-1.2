@@ -52,10 +52,10 @@ def run():
                 JOIN altitude.study_days d USING (airport,day)
                 WHERE e.airport=%s ORDER BY e.day,e.event_id,e.origin_time''', ('LFPG',))
             extracted = pd.DataFrame(cursor.fetchall(), columns=[d.name for d in cursor.description])
-    # Возвращаем даты из SQL в исходный строковый формат
-    extracted['day'] = extracted.day.astype(str)
-    expected = frame.sort_values(['day','event_id','origin_time']).reset_index(drop=True)
-    pd.testing.assert_frame_equal(expected[extracted.columns], extracted, check_dtype=False)
+            # Сверяем результат до фиксации транзакции, чтобы ошибка отменяла загрузку
+            extracted['day'] = extracted.day.astype(str)
+            expected = frame.sort_values(['day','event_id','origin_time']).reset_index(drop=True)
+            pd.testing.assert_frame_equal(expected[extracted.columns], extracted, check_dtype=False)
     extracted.to_parquet(ROOT/'data/postgres_examples.parquet', index=False)
     log = {'read': len(frame), 'inserted': after-before, 'already_present': len(frame)-(after-before),
            'database_rows': after, 'extracted': len(extracted), 'roundtrip_exact': True}
