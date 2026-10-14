@@ -61,7 +61,8 @@ def run():
             artifacts.append({'airport':airport,'model':name,'metrics_match':True})
     # Запускаем проверки и ноутбуки именно текущим интерпретатором
     commands = [['-m','pip','check'],['-m','pytest','-q'],
-                ['scripts/analyze_flight_phase.py'],['scripts/build_notebook.py'],['scripts/build_airport_comparison.py']]
+                ['scripts/analyze_flight_phase.py'],['scripts/analyze_error_tails.py'],
+                ['scripts/build_notebook.py'],['scripts/build_airport_comparison.py']]
     for args in commands:
         result = subprocess.run([sys.executable,*args],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',errors='replace')
         if result.returncode:

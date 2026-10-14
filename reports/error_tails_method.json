@@ -1,0 +1,30 @@
+{
+  "unit": "one event MAE, equal event weights",
+  "quantiles": "numpy linear interpolation",
+  "worst_count": "ceil(0.05 * number of events)",
+  "concentration": "sum of worst event MAEs / sum of all event MAEs, separately per model",
+  "paired_subset": "same events ranked by Polynomial Ridge MAE, event_id breaks ties",
+  "new_training": false,
+  "hypothesis_testing": false,
+  "sources": {
+    "LFPG": {
+      "event_errors_sha256": "a69d9a6b996af182acba6062a0cf34381e0fbaa490e15852a408cb13147bf74f",
+      "test_source_sha256": "0695be2a686db4694d1249e3b4bf70062fea71c901d00d3f11d7de580efae26a"
+    },
+    "EGLL": {
+      "event_errors_sha256": "161a4ed799b6ae1d0dfaa9a0cfc70541a6f5af6d4ba91c760fa9a3f4e0bbc33a",
+      "test_source_sha256": "312ed19b3d2ae77b8cb36584e2d730f373e271224e611201cdf58284ba16edb8"
+    },
+    "EDDF": {
+      "event_errors_sha256": "9d16f9e7ac885aeefe2d3009e0bf96de6142a17a83859345de5f6972367f7356",
+      "test_source_sha256": "a39a2db06d1617441bf8be6be901a740670e7fd3195d269f2f7b5e110ae0773f"
+    }
+  },
+  "limitations": [
+    "descriptive analysis after test inspection",
+    "model-specific worst cohorts differ",
+    "reference-selected worst cohort is not an independent group",
+    "LFPG has only 55 test events; upper quantiles are fragile",
+    "event MAE tails are not instantaneous altitude-error tails"
+  ]
+}
