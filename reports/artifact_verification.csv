@@ -1,0 +1,4 @@
+model,origin,artifact,sha256,restore_exact,validation_mae_ft,macro_mae_ft,macro_rmse_ft
+Ridge,imported_from_1.1,ridge.joblib,e26987be55baa23c5ffcfc6e04cf76f00e63eee85c9c855de6b6a0cf14f3acc0,True,17.420799476874425,20.033286036645013,25.796077737074885
+Polynomial Ridge,imported_from_1.1,polynomial_ridge.joblib,53b794a356f7cd8db647e95475b74de44eab8d619583536cb1627e00077434da,True,16.99051413285982,17.163963345421184,22.24461508099767
+PyTorch MLP,trained_in_1.2,mlp.pt,5faace805f58aa631e0bbfba06149145df238c6e7c907ab4712687b62a6615cb,True,17.064348606356603,18.8625588501408,24.466738328285626

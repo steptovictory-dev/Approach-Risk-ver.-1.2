@@ -1,0 +1,8 @@
+{
+  "architecture": "9 \u2192 16 \u2192 16 \u2192 1",
+  "parameters": 449,
+  "target_scale_ft": 79.87897620204296,
+  "source_classical_sha256": "1ddd84fba414597a091fb2c5cf40d602ff8dd0cd1394b36464a6eef0404e305b",
+  "no_retraining": true,
+  "classical_origin": "imported from 1.1, not recovered first-run 1.2 artifacts"
+}

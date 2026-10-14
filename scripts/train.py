@@ -3,6 +3,7 @@ from pathlib import Path
 import copy
 import json
 import subprocess
+import joblib
 import numpy as np
 import pandas as pd
 import torch
@@ -117,9 +118,12 @@ def run():
             model.fit(train[FEATURES], train.residual_ft, **params)
             predict = lambda f, m=model: f.baseline_ft.to_numpy()+m.predict(f[FEATURES])
             score = event_metrics(validation, predict(validation))['macro_mae_ft']
-            candidates.append((score, alpha, predict))
+            candidates.append((score, alpha, predict, model))
             search.append({'model': family, 'parameter': alpha, 'validation_macro_mae_ft': score})
-        _, alpha, predict = min(candidates, key=lambda item: item[0])
+        _, alpha, predict, selected_model = min(candidates, key=lambda item: item[0])
+        # Сохраняем весь pipeline, включая обученные преобразования
+        filename = 'ridge.joblib' if family == 'Ridge' else 'polynomial_ridge.joblib'
+        joblib.dump({'model':selected_model,'features':FEATURES,'origin':'trained_in_1.2'},artifacts/filename)
         models.append((family, predict, {'alpha': alpha}))
     candidates, histories = [], []
     for width in [16, 32]:
@@ -157,6 +161,9 @@ def run():
             if name == 'PyTorch MLP':
                 mlflow.log_artifact(str(artifacts/'mlp.pt'))
                 mlflow.log_artifact(str(reports/'mlp_history.csv'))
+            elif name in ['Ridge','Polynomial Ridge']:
+                filename = 'ridge.joblib' if name == 'Ridge' else 'polynomial_ridge.joblib'
+                mlflow.log_artifact(str(artifacts/filename))
             rows.append({'model': name, **scores, 'run_id': active.info.run_id})
     result = pd.DataFrame(rows)
     result.to_csv(reports/'model_metrics.csv', index=False)

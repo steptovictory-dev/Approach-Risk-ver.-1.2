@@ -1,0 +1,3 @@
+width,best_epoch,stopped_epoch,best_validation_mae_ft,selected
+16,145,175,17.06434860466659,True
+32,112,142,17.105716803032067,False
