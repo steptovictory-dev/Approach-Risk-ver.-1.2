@@ -2,7 +2,7 @@
 
 Воспроизводимый конвейер прогноза высоты на заходе: PostgreSQL, SQL, классические модели, PyTorch и MLflow
 
-Статус: первый сквозной запуск LFPG выполнен 14.10.2026. PostgreSQL, SQL, четыре модели и MLflow проверены. EGLL и EDDF пока не перенесены
+Статус: сквозные запуски LFPG, EGLL и EDDF выполнены 14.10.2026. PostgreSQL, четыре модели каждого аэропорта и MLflow проверены. Подробный анализ ошибок и неопределенности пока выполнен для LFPG
 
 ## Постановка
 
@@ -54,3 +54,30 @@ Python 3.12.14. Установить requirements-lock.txt в отдельное
 ```
 
 Первый аудит ожидает завершенный локальный проект 1.1 рядом с 1.2. Это пока инструкция повторения на имеющихся данных, проверка получения данных с нуля еще не выполнена. Синтетические примеры не используются для заявленных метрик
+
+## Отдельные эксперименты EGLL и EDDF
+
+[Выполненный ноутбук трех аэропортов](notebooks/02_three_airports.ipynb)
+
+| Модель | LFPG MAE, ft | EGLL MAE, ft | EDDF MAE, ft |
+| --- | ---: | ---: | ---: |
+| Baseline | 49.35 | 55.95 | 72.60 |
+| Ridge | 20.03 | 16.34 | 22.23 |
+| Polynomial Ridge | 17.16 | 15.45 | 20.87 |
+| PyTorch MLP | 18.86 | 14.52 | 20.56 |
+
+Все модели обучены отдельно по аэропортам. Преимущество MLP в EGLL и EDDF относится к средней ошибке конкретного теста; статистическая устойчивость этих сравнений еще не оценена
+
+Загрузка и обучение принимают `--airport EGLL` или `--airport EDDF`. Результаты сохраняются в `reports/EGLL` и `reports/EDDF`, данные и модели – в соответствующих локальных подкаталогах. LFPG сохраняет прежние пути. Общая база различает аэропорты в первичных и внешних ключах
+
+```powershell
+.\.venv\Scripts\python.exe scripts/audit_source.py --airport EGLL
+.\.venv\Scripts\python.exe scripts/database.py --airport EGLL
+.\.venv\Scripts\python.exe scripts/train.py --airport EGLL
+.\.venv\Scripts\python.exe scripts/audit_source.py --airport EDDF
+.\.venv\Scripts\python.exe scripts/database.py --airport EDDF
+.\.venv\Scripts\python.exe scripts/train.py --airport EDDF
+.\.venv\Scripts\python.exe scripts/build_airport_comparison.py
+```
+
+Каждый запуск обучения использует зафиксированный split своего аэропорта и выбирает параметры только по validation. Повторный запуск создает новые MLflow runs; он не нужен для просмотра готовых результатов. Итоговое сравнение не является проверкой переноса модели между аэропортами

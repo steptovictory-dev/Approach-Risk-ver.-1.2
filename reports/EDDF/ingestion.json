@@ -1,7 +1,7 @@
 {
   "read": 96714,
-  "inserted": 96714,
-  "already_present": 0,
+  "inserted": 0,
+  "already_present": 96714,
   "database_rows": 96714,
   "extracted": 96714,
   "roundtrip_exact": true
