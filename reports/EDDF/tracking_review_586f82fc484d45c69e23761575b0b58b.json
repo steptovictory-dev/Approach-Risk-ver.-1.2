@@ -1,0 +1,23 @@
+{
+  "run_id": "586f82fc484d45c69e23761575b0b58b",
+  "airport": "EDDF",
+  "model": "Ridge",
+  "review_type": "posthoc verification; original metrics and parameters preserved",
+  "original_git_commit": "86cd4d683ec8940d11ec59d19858143f04ba7f05",
+  "original_dataset_sha256": "a39a2db06d1617441bf8be6be901a740670e7fd3195d269f2f7b5e110ae0773f",
+  "current_dataset_sha256": "a39a2db06d1617441bf8be6be901a740670e7fd3195d269f2f7b5e110ae0773f",
+  "dataset_hash_matches": true,
+  "split_source_sha256": "97db3817fc7a1114dcc9b1583c3bb2ec290d404ba66c2dac6318662be672560e",
+  "environment_versions_at_review": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "pyarrow": "25.0.1",
+    "scikit-learn": "1.9.1",
+    "torch": "2.14.1",
+    "mlflow": "3.17.1",
+    "psycopg": "3.3.6",
+    "matplotlib": "3.11.2"
+  },
+  "environment_note": "current snapshot; not an independent historical runtime capture",
+  "lockfile_sha256": "63f828217d687e0da3e76b187a0156dc19e85c9ec4e2783f894b427ea15de4a5"
+}

@@ -1,0 +1,75 @@
+{
+  "python": "3.12.14",
+  "clean_review_environment": true,
+  "checked_locked_packages": 131,
+  "source_parquet_files_verified": 45,
+  "restored_models": [
+    {
+      "airport": "LFPG",
+      "model": "Ridge",
+      "metrics_match": true
+    },
+    {
+      "airport": "LFPG",
+      "model": "Polynomial Ridge",
+      "metrics_match": true
+    },
+    {
+      "airport": "LFPG",
+      "model": "PyTorch MLP",
+      "metrics_match": true
+    },
+    {
+      "airport": "EGLL",
+      "model": "Ridge",
+      "metrics_match": true
+    },
+    {
+      "airport": "EGLL",
+      "model": "Polynomial Ridge",
+      "metrics_match": true
+    },
+    {
+      "airport": "EGLL",
+      "model": "PyTorch MLP",
+      "metrics_match": true
+    },
+    {
+      "airport": "EDDF",
+      "model": "Ridge",
+      "metrics_match": true
+    },
+    {
+      "airport": "EDDF",
+      "model": "Polynomial Ridge",
+      "metrics_match": true
+    },
+    {
+      "airport": "EDDF",
+      "model": "PyTorch MLP",
+      "metrics_match": true
+    }
+  ],
+  "database_inventory": [
+    {
+      "airport": "LFPG",
+      "rows": 15931
+    },
+    {
+      "airport": "EGLL",
+      "rows": 166508
+    },
+    {
+      "airport": "EDDF",
+      "rows": 96714
+    }
+  ],
+  "tests_passed": 13,
+  "notebooks_executed": 2,
+  "new_training": false,
+  "limitations": [
+    "existing local 1.1 source data and PostgreSQL required",
+    "raw acquisition on a new machine not tested",
+    "training reproducibility across repeated seeds not tested"
+  ]
+}

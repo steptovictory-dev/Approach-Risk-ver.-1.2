@@ -19,6 +19,15 @@ def run(sql_file='analytics.sql', prefix=''):
             with connection.cursor() as cursor:
                 cursor.execute(statement)
                 result = pd.DataFrame(cursor.fetchall(), columns=[d.name for d in cursor.description])
+                # Подробные идентификаторы сохраняем локально, в отчеты выводим агрегаты
+                if 'icao24' in result.columns or 'event_id' in result.columns:
+                    local = ROOT/'data/sql'
+                    local.mkdir(parents=True,exist_ok=True)
+                    result.to_csv(local/f'{prefix}{index:02d}.csv',index=False)
+                    if 'icao24' in result.columns:
+                        result = result.groupby(['airport','splits','split_names']).size().reset_index(name='aircraft')
+                    else:
+                        result = result.drop(columns=['event_id','origin_time'],errors='ignore')
                 result.to_csv(folder/f'{prefix}{index:02d}.csv', index=False)
                 print(f'Query {index}: {len(result)} result rows')
 

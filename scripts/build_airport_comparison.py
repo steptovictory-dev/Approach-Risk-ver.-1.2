@@ -7,6 +7,7 @@ import nbformat
 from nbclient import NotebookClient
 from audit_source import ROOT
 from airport_paths import paths
+from notebook_runtime import ProjectKernelManager
 os.environ.setdefault('MPLCONFIGDIR',str(ROOT/'data/matplotlib'))
 import matplotlib
 matplotlib.use('Agg')
@@ -95,8 +96,21 @@ def run():
         'фактический горизонт известен ретроспективно. Для MLP использован один seed. '
         'Парные интервалы оценены отдельно для каждого аэропорта и условны на наблюдаемых днях. '
         'Новые параметры по test не подбирались. Эксплуатационная применимость не установлена')]
+    cells += [nbformat.v4.new_markdown_cell('## Совокупные исследовательские выводы\n\n'
+        'Обучаемая поправка уменьшает среднюю ошибку относительно продолжения вертикальной '
+        'скорости во всех трех исследованных аэропортах. Универсального преимущества MLP '
+        'над Polynomial Ridge не установлено: LFPG поддерживает Polynomial Ridge, '
+        'EGLL поддерживает MLP на трех наблюдаемых днях, EDDF показывает смену знака '
+        'разницы по дням. Эти выводы относятся к выбранным погожим дням и полосам\n\n'
+        'Следующая научная проверка должна заранее определить доступный на момент прогноза '
+        'горизонт и независимые дни оценки. Текущие test-результаты не используются для '
+        'нового подбора признаков или параметров. Go-around и эксплуатационная безопасность '
+        'не оцениваются в этой работе'),
+        nbformat.v4.new_code_cell('# Показываем проверку соответствия отчетов исходным MLflow runs\n'
+            'display(pd.read_csv(root / "reports/tracking_review.csv"))')]
     notebook = nbformat.v4.new_notebook(cells=cells)
-    NotebookClient(notebook,timeout=120,kernel_name='python3',resources={'metadata':{'path':str(ROOT)}}).execute()
+    NotebookClient(notebook,timeout=120,kernel_name='python3',kernel_manager_class=ProjectKernelManager,
+                   resources={'metadata':{'path':str(ROOT)}}).execute()
     nbformat.write(notebook,ROOT/'notebooks/02_three_airports.ipynb')
     print(combined.to_string(index=False))
 

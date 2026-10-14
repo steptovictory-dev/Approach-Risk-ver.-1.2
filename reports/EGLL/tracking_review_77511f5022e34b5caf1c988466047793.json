@@ -1,0 +1,23 @@
+{
+  "run_id": "77511f5022e34b5caf1c988466047793",
+  "airport": "EGLL",
+  "model": "Constant vertical rate",
+  "review_type": "posthoc verification; original metrics and parameters preserved",
+  "original_git_commit": "86cd4d683ec8940d11ec59d19858143f04ba7f05",
+  "original_dataset_sha256": "312ed19b3d2ae77b8cb36584e2d730f373e271224e611201cdf58284ba16edb8",
+  "current_dataset_sha256": "312ed19b3d2ae77b8cb36584e2d730f373e271224e611201cdf58284ba16edb8",
+  "dataset_hash_matches": true,
+  "split_source_sha256": "859410436500b9a4b321cc0813492a445a7650960245085cbaa5b302e3a3c7c2",
+  "environment_versions_at_review": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "pyarrow": "25.0.1",
+    "scikit-learn": "1.9.1",
+    "torch": "2.14.1",
+    "mlflow": "3.17.1",
+    "psycopg": "3.3.6",
+    "matplotlib": "3.11.2"
+  },
+  "environment_note": "current snapshot; not an independent historical runtime capture",
+  "lockfile_sha256": "63f828217d687e0da3e76b187a0156dc19e85c9ec4e2783f894b427ea15de4a5"
+}

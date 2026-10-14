@@ -2,6 +2,7 @@
 import nbformat
 from nbclient import NotebookClient
 from audit_source import ROOT
+from notebook_runtime import ProjectKernelManager
 
 cells = [
     nbformat.v4.new_markdown_cell('# Approach Risk 1.2 – Altitude Forecasting Pipeline\n\n'
@@ -19,8 +20,8 @@ cells = [
         'все значения. Ключ наблюдения: airport + event_id + origin_time. SQL JOIN присоединяет '
         'фиксированный split дня; CTE считает ошибки с равным вкладом заходов'),
     nbformat.v4.new_code_cell('# Показываем состав данных из SQL и проверку физических соотношений\n'
-        'display(pd.read_csv(root / "reports/sql/01.csv"))\n'
-        'display(pd.read_csv(root / "reports/sql/07.csv"))'),
+        'display(pd.read_csv(root / "reports/sql/01.csv").query("airport == \'LFPG\'"))\n'
+        'display(pd.read_csv(root / "reports/sql/07.csv").query("airport == \'LFPG\'"))'),
     nbformat.v4.new_markdown_cell('## Итоговое сравнение\n\n'
         'Test содержит 55 заходов. MAE сначала усредняется внутри захода, затем между заходами. '
         'RMSE – квадратный корень из среднего по заходам MSE. Все варианты зафиксированы до '
@@ -196,7 +197,14 @@ torch_cells = [
         'сохраняют выбранные pipeline непосредственно при обучении и добавляют их в MLflow')
 ]
 notebook.cells[-1:-1] = torch_cells
-NotebookClient(notebook, timeout=120, kernel_name='python3',
+notebook.cells.append(nbformat.v4.new_markdown_cell('## Итог LFPG\n\n'
+    'Физический baseline улучшен обучаемыми поправками. Polynomial Ridge имеет меньшую '
+    'среднюю MAE, чем MLP на текущем тесте. Условный bootstrap по бортам поддерживает '
+    'это направление разницы, но не характеризует перенос на новые дни. '
+    'Воспроизведение сохраненных прогнозов отделено от повторного обучения. '
+    'Для строгого онлайн-горизонта 30 секунд требуется новая заранее определенная '
+    'постановка; текущий ретроспективный горизонт не заменяется молча'))
+NotebookClient(notebook, timeout=120, kernel_name='python3', kernel_manager_class=ProjectKernelManager,
                resources={'metadata': {'path': str(ROOT)}}).execute()
 folder = ROOT/'notebooks'
 folder.mkdir(exist_ok=True)

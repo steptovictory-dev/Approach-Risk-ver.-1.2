@@ -5,6 +5,7 @@ import json
 import subprocess
 import joblib
 import argparse
+import importlib.metadata
 import numpy as np
 import pandas as pd
 import torch
@@ -146,7 +147,7 @@ def run(airport='LFPG'):
     pd.DataFrame(histories).to_csv(reports/'mlp_history.csv', index=False)
     mlflow.set_tracking_uri('sqlite:///'+(ROOT/'mlflow.db').as_posix())
     mlflow.set_experiment(f'{airport} altitude forecasting')
-    sha = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True,
+    sha = subprocess.run(['git', '-c', f'safe.directory={ROOT.as_posix()}', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True,
                          text=True).stdout.strip() or 'uncommitted'
     rows = []
     for name, predict, params in models:
@@ -154,7 +155,10 @@ def run(airport='LFPG'):
             mlflow.log_params({**params, 'seed': SEED, 'airport': airport,
                                'train_rows': len(train), 'validation_rows': len(validation),
                                'test_rows': len(test), 'dataset_sha256': digest(path),
-                               'git_commit': sha, 'features': json.dumps(FEATURES)})
+                               'git_commit': sha, 'features': json.dumps(FEATURES),
+                               'split_source_sha256': json.loads((reports/'source_audit.json').read_text())['split_sha256'],
+                               'package_versions':json.dumps({p:importlib.metadata.version(p) for p in
+                                  ['numpy','pandas','scikit-learn','torch','mlflow']})})
             prediction = predict(test)
             scores = event_metrics(test, prediction)
             val = event_metrics(validation, predict(validation))

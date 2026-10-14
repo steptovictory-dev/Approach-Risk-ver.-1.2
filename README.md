@@ -4,6 +4,8 @@
 
 Статус: сквозные запуски LFPG, EGLL и EDDF выполнены 14.10.2026. PostgreSQL, четыре модели каждого аэропорта и MLflow проверены. Анализ ошибок и условной неопределенности выполнен отдельно для всех трех аэропортов
 
+[Финальное ревью воспроизводимости](docs/FINAL_REVIEW.md): проверены чистое окружение, восстановление моделей, 13 тестов и выполнение обоих ноутбуков. Получение архивов с нуля и повторное обучение не проверялись
+
 ## Постановка
 
 Первый этап использует сохраненные сезонные данные LFPG 09L из Approach Risk 1.1. Цель – последующая наблюдаемая высота через 27–33 секунды. Модели учат поправку к прогнозу постоянной вертикальной скорости. Это исследовательская регрессия высоты; эксплуатационная применимость не подтверждена
@@ -37,6 +39,19 @@
 
 Python 3.12.14. Установить requirements-lock.txt в отдельное окружение. PostgreSQL 17.11 используется локально на 127.0.0.1:55432. DATABASE_URL хранится в игнорируемом .env
 
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+```
+
+Для просмотра сохраненных результатов без нового обучения:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/verify_reproduction.py
+```
+
+Команда требует имеющихся локальных данных, моделей и работающего PostgreSQL. Она сверяет версии lock-файла, хеши исходных Parquet, метрики восстановленных моделей, выполняет тесты и оба ноутбука. Она не получает исходные архивы с нуля и не обучает модели
+
 [Подготовка PostgreSQL, запуск, остановка и устройство загрузчика](docs/POSTGRESQL.md)
 
 [SQL JOIN: перенос split и проверка количества строк](docs/SQL_JOIN.md)
@@ -48,12 +63,26 @@ Python 3.12.14. Установить requirements-lock.txt в отдельное
 .\.venv\Scripts\python.exe scripts/database.py
 .\.venv\Scripts\python.exe scripts/query_reports.py
 .\.venv\Scripts\python.exe scripts/train.py
+.\.venv\Scripts\python.exe scripts/query_reports.py --sql-file join_checks.sql
+.\.venv\Scripts\python.exe scripts/event_mae_report.py
+.\.venv\Scripts\python.exe scripts/review_preprocessing.py
+.\.venv\Scripts\python.exe scripts/analyze_errors.py
+.\.venv\Scripts\python.exe scripts/uncertainty.py
+.\.venv\Scripts\python.exe scripts/model_artifacts.py
 .\.venv\Scripts\python.exe scripts/build_notebook.py
 .\.venv\Scripts\python.exe -m pytest -q
 .\.venv\Scripts\mlflow.exe ui --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5000
 ```
 
 Первый аудит ожидает завершенный локальный проект 1.1 рядом с 1.2. Это пока инструкция повторения на имеющихся данных, проверка получения данных с нуля еще не выполнена. Синтетические примеры не используются для заявленных метрик
+
+Независимые проверки весов и bootstrap без локальных данных и базы:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -q tests/test_preprocessing.py tests/test_uncertainty.py
+```
+
+Полный набор тестов требует локальных данных и PostgreSQL. `model_artifacts.py` импортирует классические модели LFPG из 1.1 с указанием происхождения; это отдельная процедура для текущего архивного запуска, не этап нового обучения
 
 ## Отдельные эксперименты EGLL и EDDF
 
@@ -77,6 +106,8 @@ Python 3.12.14. Установить requirements-lock.txt в отдельное
 .\.venv\Scripts\python.exe scripts/audit_source.py --airport EDDF
 .\.venv\Scripts\python.exe scripts/database.py --airport EDDF
 .\.venv\Scripts\python.exe scripts/train.py --airport EDDF
+.\.venv\Scripts\python.exe scripts/verify_airport_models.py
+.\.venv\Scripts\python.exe scripts/analyze_airport_errors.py
 .\.venv\Scripts\python.exe scripts/build_airport_comparison.py
 ```
 

@@ -10,3 +10,8 @@ pytest
 nbformat
 nbclient
 ipykernel
+python-dotenv
+joblib
+sqlparse
+jupyter-client
+packaging
