@@ -1,0 +1,17 @@
+{
+  "method": "paired aircraft-cluster percentile bootstrap",
+  "test_days": 3,
+  "aircraft": 53,
+  "aircraft_on_multiple_test_days": 2,
+  "events": 55,
+  "repetitions": 10000,
+  "seed": 20261014,
+  "scope": "conditional on the three observed test days; no day-level generalization",
+  "limitations": [
+    "shared day dependence not modeled",
+    "one fitted MLP seed",
+    "training uncertainty not modeled",
+    "no multiplicity correction",
+    "exploratory comparisons after test inspection"
+  ]
+}
