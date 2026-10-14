@@ -43,6 +43,59 @@ cells = [
         'Строгий онлайн-горизонт 30 секунд, go-around и эксплуатационная безопасность не проверены')
 ]
 notebook = nbformat.v4.new_notebook(cells=cells)
+method_cells = [
+    nbformat.v4.new_markdown_cell('## Структура данных и соединение\n\n'
+        '`study_days` содержит одну запись на аэропорт и день; `examples` – пары наблюдений. '
+        'Первичный ключ пары: airport + event_id + origin_time. Внешний ключ связывает ее с днем. '
+        'JOIN по airport и day переносит фиксированный split. Проверяем отдельно потери строк '
+        'и множественные соответствия. Загрузка через временную таблицу и COPY выполняется '
+        'одной транзакцией; конфликт данных или ошибка итоговой сверки отменяют изменения\n\n'
+        '```sql\nSELECT e.event_id, e.origin_time, d.season, d.split\n'
+        'FROM altitude.examples e\nJOIN altitude.study_days d USING (airport, day);\n```'),
+    nbformat.v4.new_code_cell('# Показываем проверку соединения и размеры выборок\n'
+        'display(pd.read_csv(root / "reports/sql/join_01.csv"))\n'
+        'display(pd.read_csv(root / "reports/sql/join_03.csv"))'),
+    nbformat.v4.new_markdown_cell('## Признаки и доступность во времени\n\n'
+        'Определения сверены с causal_features в scripts/lfpg_training.py и '
+        'research/lfpg-seasonal-learning/scripts/prepare_examples.py исходного проекта 1.1\n\n'
+        '| Признак | Смысл | Единицы | Источник и доступность |\n'
+        '| --- | --- | --- | --- |\n'
+        '| height_ft | Высота с поправкой QNH над высотой аэродрома | ft | Текущая барометрическая высота, QNH на момент прогноза, высота аэродрома |\n'
+        '| vertical_rate_fps | Барометрическая вертикальная скорость с фактором QNH | ft/s | Текущее сообщение; геометрическая скорость исключена |\n'
+        '| past_height_rate_fps | Изменение барометрической высоты за предшествующий интервал с фактором текущего QNH | ft/s | Текущая и последняя подходящая прошлая точка |\n'
+        '| speed_knots | Путевая скорость | kt | Текущее наблюдение; это не приборная скорость |\n'
+        '| distance_m | Расстояние до порога | m | Текущее положение и геометрия полосы |\n'
+        '| lateral_m | Поперечное отклонение от оси | m | Текущее положение и геометрия полосы |\n'
+        '| heading_error_deg | Разница путевого угла и направления полосы в диапазоне [-180, 180) | градусы | Текущий track и геометрия; это не курс носа самолета |\n'
+        '| past_gap_s | Интервал до прошлой точки | s | История 5–30 секунд |\n'
+        '| horizon_s | Интервал до выбранного будущего наблюдения | s | Ретроспективный выбор цели, 27–33 секунды |\n\n'
+        'QNH применяется как исследовательское преобразование барометрической высоты; '
+        'height_ft не является радиовысотой. Причинность восьми текущих/исторических признаков '
+        'относится к построению примеров и предполагаемой доступности METAR. '
+        'Сохраненный Parquet сам по себе не доказывает историческое время публикации METAR\n\n'
+        'horizon_s входит также в физический baseline. Строгий онлайн-прогноз на 30 секунд '
+        'требует отдельного определения цели и эксперимента. Простая замена всех значений '
+        'горизонта на 30 в этих примерах не повторяет исходную постановку'),
+    nbformat.v4.new_markdown_cell('## Взвешенная предобработка\n\n'
+        'Для захода с n_i парами вес каждой пары пропорционален 1/n_i. '
+        'Среднее и дисперсия StandardScaler вычисляются с этими весами только по train. '
+        'Преобразование z = (x − mu_train) / sigma_train применяется к validation и test '
+        'без обновления параметров. Это выравнивает вклад заходов, но не дней и сезонов\n\n'
+        'Проверка ниже отдельно вычисляет взвешенные моменты, сверяет сохраненный scaler MLP '
+        'и проверяет неизменность параметров после transform. Повторное обучение моделей '
+        'и новый выбор параметров не выполняются'),
+    nbformat.v4.new_code_cell('# Проверяем предобработку и показываем параметры обучающей выборки\n'
+        'import sys, json\nsys.path.insert(0, str(root / "scripts"))\n'
+        'from review_preprocessing import run as review_preprocessing\n'
+        'review_preprocessing()\n'
+        'display(pd.read_csv(root / "reports/scaler_train.csv"))\n'
+        'display(Image(filename=str(root / "reports/scaled_train_features.png")))'),
+    nbformat.v4.new_markdown_cell('Гистограммы используют только train и веса заходов. '
+        'StandardScaler меняет масштаб, но не делает распределения нормальными. '
+        'Наличие нескольких групп на графиках требует отдельного анализа структуры выборки; '
+        'по этим графикам не вводились новые правила удаления наблюдений')
+]
+notebook.cells[5:5] = method_cells
 cells_for_aggregation = [
     nbformat.v4.new_markdown_cell('## Усреднение ошибки по заходам\n\n'
         'GROUP BY сначала вычисляет MAE каждого захода; CTE хранит промежуточный результат '
@@ -54,7 +107,9 @@ cells_for_aggregation = [
         'display(pd.read_csv(root / "reports/sql/event_mae_01.csv"))\n'
         'display(Image(filename=str(root / "reports/event_pair_distribution.png")))')
 ]
-notebook.cells[-1:-1] = cells_for_aggregation
+result_index = next(i for i, cell in enumerate(notebook.cells)
+                    if cell.cell_type == 'markdown' and cell.source.startswith('## Итоговое сравнение'))
+notebook.cells[result_index:result_index] = cells_for_aggregation
 NotebookClient(notebook, timeout=120, kernel_name='python3',
                resources={'metadata': {'path': str(ROOT)}}).execute()
 folder = ROOT/'notebooks'

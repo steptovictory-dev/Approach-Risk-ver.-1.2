@@ -1,0 +1,9 @@
+{
+  "weighted_mean_matches": true,
+  "weighted_variance_matches": true,
+  "weighted_scaled_mean_zero": true,
+  "weighted_scaled_variance_one": true,
+  "saved_mlp_mean_matches": true,
+  "saved_mlp_scale_matches": true,
+  "transform_preserves_parameters": true
+}

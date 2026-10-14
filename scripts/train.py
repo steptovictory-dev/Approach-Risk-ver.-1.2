@@ -16,6 +16,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from audit_source import FEATURES, ROOT, digest
+from preprocessing import fit_scaler
 
 SEED = 20261014
 
@@ -38,7 +39,7 @@ def weights(frame):
 def mlp_fit(train, validation, width):
     # Обучаем все преобразования только на обучающей выборке
     torch.manual_seed(SEED)
-    scaler = StandardScaler().fit(train[FEATURES], sample_weight=weights(train))
+    scaler = fit_scaler(train)
     target_scale = max(float(np.sqrt(np.average(train.residual_ft.to_numpy()**2,
                                                weights=weights(train)))), 1.0)
     x = torch.tensor(scaler.transform(train[FEATURES]), dtype=torch.float32)
