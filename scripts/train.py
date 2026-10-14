@@ -39,9 +39,9 @@ def weights(frame):
     return value / value.mean()
 
 
-def mlp_fit(train, validation, width):
+def mlp_fit(train, validation, width, seed=SEED):
     # Обучаем все преобразования только на обучающей выборке
-    torch.manual_seed(SEED)
+    torch.manual_seed(seed)
     scaler = fit_scaler(train)
     target_scale = max(float(np.sqrt(np.average(train.residual_ft.to_numpy()**2,
                                                weights=weights(train)))), 1.0)
@@ -49,7 +49,7 @@ def mlp_fit(train, validation, width):
     y = torch.tensor(train.residual_ft.to_numpy()/target_scale, dtype=torch.float32)
     w = torch.tensor(weights(train), dtype=torch.float32)
     vx = torch.tensor(scaler.transform(validation[FEATURES]), dtype=torch.float32)
-    generator = torch.Generator().manual_seed(SEED)
+    generator = torch.Generator().manual_seed(seed)
     loader = DataLoader(TensorDataset(x, y, w), batch_size=256, shuffle=True,
                         generator=generator)
     model = nn.Sequential(nn.Linear(len(FEATURES), width), nn.ReLU(),

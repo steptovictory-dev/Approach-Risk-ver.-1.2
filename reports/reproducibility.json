@@ -64,12 +64,13 @@
       "rows": 96714
     }
   ],
-  "tests_passed": 20,
+  "tests_passed": 21,
   "notebooks_executed": 2,
   "new_training": false,
+  "seed_models_restored": 15,
   "limitations": [
     "existing local 1.1 source data and PostgreSQL required",
     "raw acquisition on a new machine not tested",
-    "training reproducibility across repeated seeds not tested"
+    "five seeds evaluated on fixed days; new-day uncertainty not tested"
   ]
 }

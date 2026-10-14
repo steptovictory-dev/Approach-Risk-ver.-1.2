@@ -183,7 +183,8 @@ torch_cells = [
         'модели эпохи. Ее нельзя напрямую сопоставлять с validation MAE в ft\n\n'
         'Ширина и лучшая эпоха выбираются по validation. Test не участвует в остановке. '
         'Из двух ширин выбрана 16; лучшие веса относятся к эпохе 145, остановка – 175. '
-        'Один seed не характеризует вариативность нейросетевого обучения'),
+        'Основная таблица относится к исходному seed. Дополнительная проверка пяти seed '
+        'на фиксированных днях представлена в notebooks/02_three_airports.ipynb'),
     nbformat.v4.new_code_cell('# Показываем выбор эпохи и проверку восстановленных моделей\n'
         'display(pd.read_csv(root / "reports/mlp_selection.csv"))\n'
         'display(pd.read_csv(root / "reports/artifact_verification.csv"))'),

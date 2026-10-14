@@ -62,6 +62,7 @@ def run():
     # Запускаем проверки и ноутбуки именно текущим интерпретатором
     commands = [['-m','pip','check'],['-m','pytest','-q'],
                 ['scripts/analyze_flight_phase.py'],['scripts/analyze_error_tails.py'],
+                ['scripts/verify_seed_stability.py'],
                 ['scripts/build_notebook.py'],['scripts/build_airport_comparison.py']]
     for args in commands:
         result = subprocess.run([sys.executable,*args],cwd=ROOT,capture_output=True,text=True,encoding='utf-8',errors='replace')
@@ -76,10 +77,10 @@ def run():
     report = {'python':sys.version.split()[0],'clean_review_environment':Path(sys.prefix)==ROOT/'data/review_env',
               'checked_locked_packages':checked_packages,'source_parquet_files_verified':source_files_verified,
               'restored_models':artifacts,'database_inventory':database,'tests_passed':tests_passed,
-              'notebooks_executed':2,'new_training':False,
+              'notebooks_executed':2,'new_training':False,'seed_models_restored':15,
               'limitations':['existing local 1.1 source data and PostgreSQL required',
                              'raw acquisition on a new machine not tested',
-                             'training reproducibility across repeated seeds not tested']}
+                             'five seeds evaluated on fixed days; new-day uncertainty not tested']}
     (ROOT/'reports/reproducibility.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
     print(json.dumps(report,indent=2))
 
