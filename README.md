@@ -39,6 +39,8 @@ Python 3.12.14. Установить requirements-lock.txt в отдельное
 
 [Подготовка PostgreSQL, запуск, остановка и устройство загрузчика](docs/POSTGRESQL.md)
 
+[SQL JOIN: перенос split и проверка количества строк](docs/SQL_JOIN.md)
+
 ```powershell
 .\.venv\Scripts\python.exe scripts/audit_source.py
 .\.venv\Scripts\python.exe scripts/database.py

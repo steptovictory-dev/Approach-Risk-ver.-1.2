@@ -1,0 +1,4 @@
+split,pairs,events,days
+test,1924,55,3
+train,10715,384,9
+validation,3292,114,3
