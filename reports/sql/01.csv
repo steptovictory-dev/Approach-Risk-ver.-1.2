@@ -1,0 +1,10 @@
+airport,season,split,pairs,events
+LFPG,autumn,test,1074,14
+LFPG,autumn,train,3401,48
+LFPG,autumn,validation,1088,14
+LFPG,spring,test,366,24
+LFPG,spring,train,5315,282
+LFPG,spring,validation,1694,88
+LFPG,summer,test,484,17
+LFPG,summer,train,1999,54
+LFPG,summer,validation,510,12

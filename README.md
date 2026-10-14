@@ -2,7 +2,7 @@
 
 Воспроизводимый конвейер прогноза высоты на заходе: PostgreSQL, SQL, классические модели, PyTorch и MLflow
 
-Статус: создание проекта, результаты 1.2 пока не получены
+Статус: первый сквозной запуск LFPG выполнен 14.10.2026. PostgreSQL, SQL, четыре модели и MLflow проверены. EGLL и EDDF пока не перенесены
 
 ## Постановка
 
@@ -21,3 +21,30 @@
 - Перенос конвейера на EGLL и EDDF после рабочего запуска LFPG
 
 Исходные данные, модели, окружение и все чекпоинты остаются локальными. Новые зависимости изолируются от завершенных проектов 1.0 и 1.1
+
+## Проверенный результат LFPG
+
+| Модель | MAE, ft |
+| --- | ---: |
+| Физический baseline | 49.35 |
+| Ridge | 20.03 |
+| Polynomial Ridge | 17.16 |
+| PyTorch MLP | 18.86 |
+
+Каждый из 55 тестовых заходов имеет равный вклад. MLP уступила Polynomial Ridge. Четыре настоящих MLflow runs сохранены локально. [Отчет](reports/experiment_summary.md), [выполненный ноутбук](notebooks/01_lfpg_pipeline.ipynb)
+
+## Повторить на имеющихся локальных данных
+
+Python 3.12.14. Установить requirements-lock.txt в отдельное окружение. PostgreSQL 17.11 используется локально на 127.0.0.1:55432. DATABASE_URL хранится в игнорируемом .env
+
+```powershell
+.\.venv\Scripts\python.exe scripts/audit_source.py
+.\.venv\Scripts\python.exe scripts/database.py
+.\.venv\Scripts\python.exe scripts/query_reports.py
+.\.venv\Scripts\python.exe scripts/train.py
+.\.venv\Scripts\python.exe scripts/build_notebook.py
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\mlflow.exe ui --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5000
+```
+
+Первый аудит ожидает завершенный локальный проект 1.1 рядом с 1.2. Это пока инструкция повторения на имеющихся данных, проверка получения данных с нуля еще не выполнена. Синтетические примеры не используются для заявленных метрик

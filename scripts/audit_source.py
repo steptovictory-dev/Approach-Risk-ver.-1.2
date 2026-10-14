@@ -13,7 +13,7 @@ FEATURES = ['height_ft', 'vertical_rate_fps', 'past_height_rate_fps',
 
 
 def digest(path):
-    # Stream hashes without loading raw archives into memory
+    # Вычисляем хеши потоком, без загрузки исходных архивов в память
     with path.open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
@@ -35,7 +35,7 @@ def audit(source):
         frames.append(frame.assign(season=row.season, split=row.split, airport='LFPG'))
         files.append({'path': str(path.relative_to(source)), 'sha256': digest(path)})
     frame = pd.concat(frames, ignore_index=True)
-    # Preserve source timestamps as Unix seconds; PostgreSQL converts them explicitly
+    # Сохраняем исходное время в секундах Unix для явного преобразования в PostgreSQL
     numeric = FEATURES + ['target_height_ft', 'baseline_ft', 'residual_ft',
                           'origin_time', 'target_time', 'origin_metar_time',
                           'origin_metar_available_time', 'boundary_time']
@@ -54,7 +54,7 @@ def audit(source):
     }
     if not all(checks.values()):
         raise ValueError(f'Source checks failed: {checks}')
-    # Only validated examples are staged locally; source files remain unchanged
+    # Сохраняем локально только проверенные примеры, исходные файлы не изменяем
     local = ROOT / 'data'
     local.mkdir(exist_ok=True)
     frame.to_parquet(local / 'lfpg_examples.parquet', index=False)

@@ -16,7 +16,7 @@ def run():
         raise RuntimeError('Set DATABASE_URL in the local .env')
     frame = pd.read_parquet(ROOT/'data/lfpg_examples.parquet')
     days = pd.read_csv(ROOT/'data/selected_days.csv')
-    # Reject incomplete or conflicting source records before opening a transaction
+    # Отклоняем неполные или конфликтующие исходные записи до открытия транзакции
     if frame.isna().any().any() or frame.duplicated(['airport','event_id','origin_time']).any():
         raise ValueError('Source contains nulls or duplicate keys')
     if not np.isfinite(frame.select_dtypes('number').to_numpy()).all():
@@ -25,7 +25,7 @@ def run():
     with psycopg.connect(uri) as connection:
         with connection.cursor() as cursor:
             cursor.execute((ROOT/'sql/01_schema.sql').read_text(encoding='utf-8'))
-            # Immutable day metadata: a changed split must fail rather than overwrite
+            # Метаданные дней неизменны: изменение разбиения должно вызывать ошибку
             for row in days.itertuples(index=False):
                 cursor.execute('INSERT INTO altitude.study_days VALUES (%s,%s,%s,%s) ON CONFLICT DO NOTHING',
                                ('LFPG', row.day, row.season, row.split))
@@ -38,7 +38,7 @@ def run():
                     sql.SQL(',').join(map(sql.Identifier, columns)))) as copy:
                 for row in frame[columns].itertuples(index=False, name=None):
                     copy.write_row(row)
-            # Compare all columns for existing keys; silently accepting changed data is unsafe
+            # Для существующих ключей сравниваем все поля и отклоняем измененные данные
             cursor.execute('''SELECT count(*) FROM incoming i JOIN altitude.examples e
                 USING (airport,event_id,origin_time) WHERE to_jsonb(i) IS DISTINCT FROM to_jsonb(e)''')
             if cursor.fetchone()[0]:
@@ -52,7 +52,7 @@ def run():
                 JOIN altitude.study_days d USING (airport,day)
                 WHERE e.airport=%s ORDER BY e.day,e.event_id,e.origin_time''', ('LFPG',))
             extracted = pd.DataFrame(cursor.fetchall(), columns=[d.name for d in cursor.description])
-    # Normalize SQL dates back to the original day format
+    # Возвращаем даты из SQL в исходный строковый формат
     extracted['day'] = extracted.day.astype(str)
     expected = frame.sort_values(['day','event_id','origin_time']).reset_index(drop=True)
     pd.testing.assert_frame_equal(expected[extracted.columns], extracted, check_dtype=False)

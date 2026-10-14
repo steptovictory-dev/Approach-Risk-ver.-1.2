@@ -21,7 +21,7 @@ SEED = 20261014
 
 
 def event_metrics(frame, prediction):
-    # Average within each event first, then give every event equal weight
+    # Сначала усредняем ошибки внутри захода, затем даем всем заходам одинаковый вес
     errors = pd.DataFrame({'event': frame.event_id.to_numpy(),
                            'absolute': np.abs(prediction-frame.target_height_ft.to_numpy()),
                            'squared': (prediction-frame.target_height_ft.to_numpy())**2})
@@ -36,7 +36,7 @@ def weights(frame):
 
 
 def mlp_fit(train, validation, width):
-    # Fit all transformations only on train
+    # Обучаем все преобразования только на обучающей выборке
     torch.manual_seed(SEED)
     scaler = StandardScaler().fit(train[FEATURES], sample_weight=weights(train))
     target_scale = max(float(np.sqrt(np.average(train.residual_ft.to_numpy()**2,
@@ -57,7 +57,7 @@ def mlp_fit(train, validation, width):
         total = 0.0
         for bx, by, bw in loader:
             optimizer.zero_grad()
-            # Normalized event weights preserve equal event contribution in expectation
+            # Нормированные веса в среднем сохраняют одинаковый вклад каждого захода
             loss = (((model(bx).squeeze(1)-by)**2)*bw).mean()
             loss.backward()
             optimizer.step()
@@ -133,7 +133,7 @@ def run():
                 'target_scale': scale}, artifacts/'mlp.pt')
     models.append(('PyTorch MLP', predict, {'width': width, 'learning_rate': .001,
                                          'max_epochs': 300, 'patience': 30}))
-    # All candidates are frozen before the first test evaluation
+    # Фиксируем все варианты моделей до первой оценки на тестовой выборке
     pd.DataFrame(search).to_csv(reports/'validation_search.csv', index=False)
     pd.DataFrame(histories).to_csv(reports/'mlp_history.csv', index=False)
     mlflow.set_tracking_uri('sqlite:///'+(ROOT/'mlflow.db').as_posix())

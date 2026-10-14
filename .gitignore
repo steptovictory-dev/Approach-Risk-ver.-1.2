@@ -1,16 +1,16 @@
-# Local environments and secrets
+# Локальные окружения и секреты
 .venv/
 .env
 __pycache__/
 .pytest_cache/
 *.pyc
-# Local data and experiment storage
+# Локальные данные и хранилища экспериментов
 data/
 artifacts/
 mlruns/
 mlartifacts/
 *.db
-# All checkpoints remain local
+# Все чекпоинты остаются локальными
 Checkpoint/
 Checkpoints/
 00_Checkpoint/
