@@ -12,6 +12,8 @@ mlartifacts/
 *.db
 # Локальная фиксация постановки перед повторным обучением
 reports/seed_stability_protocol.json
+# Локальные тексты статей и их материалы
+/Articles/
 # Все чекпоинты остаются локальными
 Checkpoint/
 Checkpoints/
