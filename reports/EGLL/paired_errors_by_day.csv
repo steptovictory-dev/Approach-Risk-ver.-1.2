@@ -1,0 +1,13 @@
+day,model,reference,events,mean_delta_mae_ft,better_events
+2025-04-07,Polynomial Ridge,Constant vertical rate,385,-43.029745182400355,384
+2025-08-25,Polynomial Ridge,Constant vertical rate,384,-49.852799744257915,384
+2025-10-18,Polynomial Ridge,Constant vertical rate,367,-28.073500843160755,366
+2025-04-07,PyTorch MLP,Constant vertical rate,385,-44.73408074543555,385
+2025-08-25,PyTorch MLP,Constant vertical rate,384,-50.28475400424264,384
+2025-10-18,PyTorch MLP,Constant vertical rate,367,-28.721076889080916,366
+2025-04-07,PyTorch MLP,Polynomial Ridge,385,-1.7043355630351975,312
+2025-08-25,PyTorch MLP,Polynomial Ridge,384,-0.4319542599847344,212
+2025-10-18,PyTorch MLP,Polynomial Ridge,367,-0.6475760459201665,253
+2025-04-07,Ridge,Polynomial Ridge,385,0.9147611475191127,107
+2025-08-25,Ridge,Polynomial Ridge,384,0.6823260141685524,136
+2025-10-18,Ridge,Polynomial Ridge,367,1.0766280374642765,78

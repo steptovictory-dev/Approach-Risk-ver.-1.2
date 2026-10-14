@@ -1,0 +1,18 @@
+{
+  "airport": "EDDF",
+  "test_days": 3,
+  "events": 540,
+  "aircraft": 302,
+  "aircraft_on_multiple_days": 116,
+  "method": "paired aircraft-cluster percentile bootstrap",
+  "repetitions": 10000,
+  "seed": 20261014,
+  "conditional_on_observed_days": true,
+  "day_dependence_modeled": false,
+  "retrained": false,
+  "artifact_sha256": {
+    "ridge.joblib": "5333d11fcca90c488fe38e6ebd7dbd3d69e6653fc14e2e0e28fe223219cbdcab",
+    "polynomial_ridge.joblib": "b5c1346c0745f13a6ab6fcab4c1f585f9b3c817711dc6e1712bce0a73799360d",
+    "mlp.pt": "778e53dc6c3f8019a9a6f06d962dfb35f3eec926a2444a7a1b0b087173555dd0"
+  }
+}

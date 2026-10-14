@@ -1,0 +1,18 @@
+{
+  "airport": "EGLL",
+  "test_days": 3,
+  "events": 1136,
+  "aircraft": 642,
+  "aircraft_on_multiple_days": 239,
+  "method": "paired aircraft-cluster percentile bootstrap",
+  "repetitions": 10000,
+  "seed": 20261014,
+  "conditional_on_observed_days": true,
+  "day_dependence_modeled": false,
+  "retrained": false,
+  "artifact_sha256": {
+    "ridge.joblib": "19febe5ca452f6a5803bf696fae8c1a03036876878ec72622948cb01f20eeb9d",
+    "polynomial_ridge.joblib": "a77a3aadca249d03a69678e920fae344a51c3931cbe6cca5b4ae753ed73e63bc",
+    "mlp.pt": "8b080277396587389fc773f7a252fd6e198a95cd99f3f8595129da2b57febb4c"
+  }
+}

@@ -61,11 +61,39 @@ def run():
                 f'print(json.loads((root / "reports/{airport}/ingestion.json").read_text()))\n'
                 f'display(pd.read_csv(root / "reports/{airport}/validation_search.csv"))\n'
                 f'display(Image(filename=str(root / "reports/{airport}/mlp_validation.png")))')]
+        cells += [nbformat.v4.new_markdown_cell(f'## {airport}: парный анализ ошибок и неопределенности\n\n'
+            'Все сравнения выполнены на сохраненных моделях без переобучения. '
+            'MAE, bias и MSE сначала усредняются внутри захода. Bias = прогноз минус наблюдение; '
+            'положительный знак означает завышение высоты. P90 – 90-й процентиль MAE заходов. '
+            'Сезон здесь представлен одним днем и не отделен от состава этого дня\n\n'
+            'Парный bootstrap выбирает борта с возвращением, сохраняя все заходы выбранного '
+            'борта вместе. 10 000 повторов, seed 20261014, границы 2.5% и 97.5%. '
+            'Интервалы условны на трех наблюдаемых днях: общая зависимость внутри дня '
+            'и неопределенность обучения не моделируются. Один seed MLP, без поправки '
+            'на множественные сравнения; анализ выполнен после просмотра test'),
+            nbformat.v4.new_code_cell('# Показываем ошибки по дням, парные разницы и интервалы\n'
+                f'display(pd.read_csv(root / "reports/{airport}/errors_by_day.csv"))\n'
+                f'display(pd.read_csv(root / "reports/{airport}/paired_uncertainty.csv"))\n'
+                f'daily = pd.read_csv(root / "reports/{airport}/paired_errors_by_day.csv")\n'
+                'display(daily.loc[daily.model.eq("PyTorch MLP") & daily.reference.eq("Polynomial Ridge")])\n'
+                f'display(Image(filename=str(root / "reports/{airport}/error_analysis.png")))')]
+        interpretation = ('MLP улучшила Polynomial Ridge на 777 из 1136 заходов; средняя разница '
+            '−0.93 ft, условный интервал −1.13…−0.77 ft. Средние разницы на всех трех днях '
+            'отрицательны: −1.70, −0.43, −0.65 ft. MLP в среднем занижает высоту на каждом '
+            'из этих дней. Вывод ограничен выбранной выборкой и не подтверждает перенос '
+            'на другие условия') if airport == 'EGLL' else (
+            'MLP улучшила Polynomial Ridge на 294 из 540 заходов; средняя разница −0.31 ft, '
+            'условный интервал −0.56…−0.06 ft. По дням знак меняется: май −1.40 ft, '
+            'август +0.36 ft, октябрь +0.37 ft. Общий выигрыш определяется майским днем; '
+            'преимущество не сохраняется во всех тестовых днях. MLP в среднем завышает '
+            'высоту на всех трех днях. Интервал по бортам не устраняет зависимость '
+            'результата от конкретного дня')
+        cells += [nbformat.v4.new_markdown_cell(interpretation)]
     cells += [nbformat.v4.new_markdown_cell('## Ограничения сравнения\n\n'
         'Размер и состав выборок различаются; абсолютная MAE не определяет сложность аэропорта. '
         'На сезон приходится один тестовый день, борта могут повторяться между split, '
         'фактический горизонт известен ретроспективно. Для MLP использован один seed. '
-        'Сезонный анализ ошибок и интервалы LFPG не переносятся автоматически на EGLL/EDDF. '
+        'Парные интервалы оценены отдельно для каждого аэропорта и условны на наблюдаемых днях. '
         'Новые параметры по test не подбирались. Эксплуатационная применимость не установлена')]
     notebook = nbformat.v4.new_notebook(cells=cells)
     NotebookClient(notebook,timeout=120,kernel_name='python3',resources={'metadata':{'path':str(ROOT)}}).execute()
