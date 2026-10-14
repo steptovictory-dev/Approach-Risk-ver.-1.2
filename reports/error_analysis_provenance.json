@@ -1,0 +1,8 @@
+{
+  "classical_models_source": "Approach Risk ver. 1.1\\research\\lfpg-seasonal-learning\\artifacts\\models.joblib",
+  "classical_models_sha256": "1ddd84fba414597a091fb2c5cf40d602ff8dd0cd1394b36464a6eef0404e305b",
+  "mlp_sha256": "5faace805f58aa631e0bbfba06149145df238c6e7c907ab4712687b62a6615cb",
+  "test_data_sha256": "0695be2a686db4694d1249e3b4bf70062fea71c901d00d3f11d7de580efae26a",
+  "aggregate_metrics_match": true,
+  "retrained": false
+}

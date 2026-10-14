@@ -110,6 +110,35 @@ cells_for_aggregation = [
 result_index = next(i for i, cell in enumerate(notebook.cells)
                     if cell.cell_type == 'markdown' and cell.source.startswith('## Итоговое сравнение'))
 notebook.cells[result_index:result_index] = cells_for_aggregation
+error_cells = [
+    nbformat.v4.new_markdown_cell('## Анализ ошибок фиксированных моделей\n\n'
+        'Использованы сохраненная MLP из 1.2 и классические pooled-модели из 1.1. '
+        'Классические модели первого запуска 1.2 не были сохранены. '
+        'Для моделей 1.1 проверены набор признаков, выбранные alpha и совпадение агрегатных '
+        'MAE/RMSE с результатами 1.2; совпадение агрегатов не доказывает идентичность '
+        'каждого отдельного предсказания первого запуска. Хеши артефактов зафиксированы. '
+        'Обучение, выбор параметров и корректировка моделей не выполнялись\n\n'
+        'Bias определяется как прогноз минус наблюдаемая высота: положительное значение '
+        'означает завышение. Средняя bias и RMSE сохраняют равный вклад заходов. '
+        'P90 относится к распределению MAE отдельных заходов, не к ошибкам отдельных точек'),
+    nbformat.v4.new_code_cell('# Показываем сезонные ошибки и парное сравнение одних и тех же заходов\n'
+        'display(pd.read_csv(root / "reports/errors_by_season.csv"))\n'
+        'display(pd.read_csv(root / "reports/paired_event_errors.csv"))\n'
+        'display(Image(filename=str(root / "reports/error_analysis.png")))'),
+    nbformat.v4.new_markdown_cell('Polynomial Ridge улучшила baseline на 52 из 55 заходов, '
+        'MLP – на 51. MLP уступила Polynomial Ridge на 42 заходах и улучшила ее на 13; '
+        'средняя разница MAE составила +1.70 ft. Осенью Ridge имеет меньшую среднюю '
+        'MAE, чем Polynomial Ridge и MLP. Общее превосходство Polynomial Ridge не '
+        'означает превосходства на каждом заходе или в каждой подгруппе\n\n'
+        'Летом средняя bias Polynomial Ridge равна +9.22 ft, MLP +10.62 ft; '
+        'весной соответственно −2.97 и −11.59 ft, осенью −2.17 и −3.07 ft. '
+        'Каждому сезону соответствует один тестовый день. Сезон, конкретный день и '
+        'состав заходов смешаны: эти наблюдения не доказывают причинный сезонный эффект. '
+        'Доверительные интервалы и статистическая значимость пока не оценены. '
+        'Точки одного захода зависимы, а борта могут повторяться между днями; '
+        'независимый bootstrap строк не подходит для обоснования выводов')
+]
+notebook.cells[-1:-1] = error_cells
 NotebookClient(notebook, timeout=120, kernel_name='python3',
                resources={'metadata': {'path': str(ROOT)}}).execute()
 folder = ROOT/'notebooks'

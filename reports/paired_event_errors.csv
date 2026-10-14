@@ -1,0 +1,6 @@
+model,reference,events,mean_delta_mae_ft,median_delta_mae_ft,better_events,worse_events
+Ridge,Constant vertical rate,55,-29.31567285532795,-28.903008061069162,48,7
+Ridge,Polynomial Ridge,55,2.869322691223829,1.3895922944694625,14,41
+Polynomial Ridge,Constant vertical rate,55,-32.18499554655178,-30.82181297418837,52,3
+PyTorch MLP,Constant vertical rate,55,-30.48640004183216,-27.067500573824606,51,4
+PyTorch MLP,Polynomial Ridge,55,1.6985955047196193,1.0862841140041404,13,42
